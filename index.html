@@ -231,6 +231,7 @@
             display: flex;
             justify-content: space-between;
             margin-top: 1rem;
+            gap: 10px;
         }
 
         .resource-btn {
@@ -246,10 +247,66 @@
             text-decoration: none;
             display: inline-block;
             text-align: center;
+            flex: 1;
         }
 
         .resource-btn:hover {
             background: var(--primary-dark);
+        }
+
+        /* Стили для меню "Поделиться" */
+        .share-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .share-btn {
+            background: #6B7280;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+
+        .share-btn:hover {
+            background: #4B5563;
+        }
+
+        .share-menu {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            z-index: 1000;
+            margin-bottom: 5px;
+        }
+
+        .share-dropdown:hover .share-menu {
+            display: block;
+        }
+
+        .share-option {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .share-option:hover {
+            background: #F3F4F6;
         }
 
         .add-item-btn {
@@ -763,6 +820,19 @@
                 gap: 10px;
             }
 
+            .share-dropdown {
+                width: 100%;
+            }
+
+            .share-btn {
+                width: 100%;
+            }
+
+            .share-menu {
+                width: 100%;
+                left: 0;
+            }
+
             .add-item-tabs {
                 flex-direction: column;
             }
@@ -1213,6 +1283,46 @@
             }
         };
 
+        // Функции для шаринга
+        function createShareMessage(item) {
+            return `Хей! Посмотри какую крутую информацию я нашел!\n\n"${item.title}"\n${item.description}\n\nСсылка: ${item.url}\n\n#Хранилище`;
+        }
+
+        const shareHandlers = {
+            copy: (item) => {
+                const message = createShareMessage(item);
+                navigator.clipboard.writeText(message).then(() => {
+                    alert('✅ Сообщение скопировано в буфер обмена!');
+                }).catch(() => {
+                    alert('❌ Не удалось скопировать сообщение');
+                });
+            },
+            
+            whatsapp: (item) => {
+                const message = createShareMessage(item);
+                const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            },
+            
+            telegram: (item) => {
+                const message = createShareMessage(item);
+                const url = `https://t.me/share/url?url=${encodeURIComponent(item.url)}&text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            },
+            
+            vk: (item) => {
+                const message = createShareMessage(item);
+                const url = `https://vk.com/share.php?url=${encodeURIComponent(item.url)}&title=${encodeURIComponent(item.title)}&comment=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            },
+            
+            twitter: (item) => {
+                const message = createShareMessage(item);
+                const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            }
+        };
+
         // Инициализация приложения
         document.addEventListener('DOMContentLoaded', function() {
             renderFeaturedItems();
@@ -1386,6 +1496,16 @@
                     </div>
                     <div class="item-actions">
                         <a href="${item.url}" target="_blank" class="resource-btn">Перейти к ресурсу</a>
+                        <div class="share-dropdown">
+                            <button class="share-btn">📤 Поделиться</button>
+                            <div class="share-menu">
+                                <button class="share-option" data-platform="copy">📋 Скопировать ссылку</button>
+                                <button class="share-option" data-platform="whatsapp">💚 WhatsApp</button>
+                                <button class="share-option" data-platform="telegram">📱 Telegram</button>
+                                <button class="share-option" data-platform="vk">🔵 VK</button>
+                                <button class="share-option" data-platform="twitter">🐦 Twitter</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1393,6 +1513,18 @@
             const image = card.querySelector('.item-image');
             image.addEventListener('click', () => {
                 window.open(item.url, '_blank');
+            });
+            
+            // Обработчики для кнопок шаринга
+            const shareOptions = card.querySelectorAll('.share-option');
+            shareOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const platform = option.dataset.platform;
+                    if (shareHandlers[platform]) {
+                        shareHandlers[platform](item);
+                    }
+                });
             });
             
             return card;
