@@ -143,6 +143,36 @@
             padding-bottom: 0.5rem;
         }
 
+        /* Хлебные крошки */
+        .breadcrumbs {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .breadcrumbs a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumbs a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .breadcrumbs .separator {
+            color: var(--text-secondary);
+            margin: 0 0.3rem;
+        }
+
+        .breadcrumbs .current {
+            color: var(--text-secondary);
+        }
+
         /* Поисковая строка */
         .search-container {
             margin-bottom: 2rem;
@@ -857,6 +887,10 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .breadcrumbs {
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -878,6 +912,10 @@
 
             .benefits-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .breadcrumbs {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -904,6 +942,11 @@
 
     <!-- Основной контент -->
     <main>
+        <!-- Хлебные крошки -->
+        <nav class="breadcrumbs" id="breadcrumbs">
+            <a href="#home">Главная</a>
+        </nav>
+
         <!-- Главная страница -->
         <section id="home-page" class="page active">
             <h1 class="page-title">Добро пожаловать в Хранилище</h1>
@@ -1238,6 +1281,7 @@
         const itemCodeTemplate = document.getElementById('item-code-template');
         const categoriesContainer = document.getElementById('categories-container');
         const categoryItemsContainer = document.getElementById('category-items-container');
+        const breadcrumbsContainer = document.getElementById('breadcrumbs');
 
         // Обобщенные категории
         const generalCategories = {
@@ -1323,6 +1367,37 @@
             }
         };
 
+        // Функции для хлебных крошек
+        function updateBreadcrumbs(page, category = null, item = null) {
+            let html = '<a href="#home">Главная</a>';
+            
+            if (page === 'categories' && category) {
+                html += ` <span class="separator">→</span> <a href="#categories">Категории</a>`;
+                html += ` <span class="separator">→</span> <span class="current">${category}</span>`;
+            }
+            else if (page === 'items') {
+                html += ` <span class="separator">→</span> <span class="current">Все элементы</span>`;
+            }
+            else if (page === 'about') {
+                html += ` <span class="separator">→</span> <span class="current">О проекте</span>`;
+            }
+            else {
+                html += ` <span class="separator">→</span> <span class="current">${getPageTitle(page)}</span>`;
+            }
+            
+            breadcrumbsContainer.innerHTML = html;
+        }
+
+        function getPageTitle(page) {
+            const titles = {
+                'home': 'Главная',
+                'items': 'Элементы', 
+                'categories': 'Категории',
+                'about': 'О проекте'
+            };
+            return titles[page] || 'Главная';
+        }
+
         // Инициализация приложения
         document.addEventListener('DOMContentLoaded', function() {
             renderFeaturedItems();
@@ -1331,6 +1406,7 @@
             renderGeneralCategories();
             setupEventListeners();
             setupTabs();
+            updateBreadcrumbs('home');
         });
 
         // Настройка вкладок
@@ -1425,6 +1501,7 @@
                     });
                     categoryCard.classList.add('active');
                     showCategoryItems(categoryName, categoryData.tags);
+                    updateBreadcrumbs('categories', categoryName);
                 });
                 
                 categoriesContainer.appendChild(categoryCard);
@@ -1566,6 +1643,9 @@
                     
                     pages.forEach(page => page.classList.remove('active'));
                     document.getElementById(`${targetPage}-page`).classList.add('active');
+                    
+                    // Обновляем хлебные крошки
+                    updateBreadcrumbs(targetPage);
                 });
             });
             
