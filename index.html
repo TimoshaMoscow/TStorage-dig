@@ -1383,8 +1383,7 @@
 
         // Функции для шаринга
         function createShareMessage(item) {
-            const description = item.shortDescription || item.description;
-            return `Хей! Посмотри какую крутую информацию я нашел!\n\n"${item.title}"\n${description}\n\nСсылка: ${item.url}\n\n#Хранилище\n\nА нашёл я это в самом лучшем Хранилище цифровых ресурсов: https://timoshamoscow.github.io/hranilishe.github.io/`;
+            return `Хей! Посмотри какую крутую информацию я нашел!\n\n"${item.title}"\n${item.shortDescription}\n\nЧитать полностью: https://timoshamoscow.github.io/hranilishe.github.io/\n\nСсылка: ${item.url}\n\n#Хранилище\n\nА нашёл я это в самом лучшем Хранилище цифровых ресурсов: https://timoshamoscow.github.io/hranilishe.github.io/`;
         }
 
         const shareHandlers = {
