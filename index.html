@@ -269,15 +269,18 @@
     color: white;
     border: none;
     border-radius: 6px;
-    padding: 8px 16px;
+    padding: 10px 12px;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 500;
     transition: background-color 0.3s;
     text-decoration: none;
-    display: inline-block;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex: 1;
+    min-height: 40px;
+    text-align: center;
 }
 
 .resource-btn:hover {
@@ -290,12 +293,15 @@
     color: white;
     border: none;
     border-radius: 6px;
-    padding: 8px 16px;
+    padding: 10px 12px;
     cursor: pointer;
     font-size: 0.9rem;
     transition: background-color 0.3s;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex: 1;
+    min-height: 40px;
     text-align: center;
 }
 
@@ -306,7 +312,7 @@
 /* Стили для меню "Поделиться" */
 .share-dropdown {
     position: relative;
-    display: inline-block;
+    display: flex;
     flex: 1;
 }
 
@@ -315,19 +321,21 @@
     color: white;
     border: none;
     border-radius: 6px;
-    padding: 8px 16px;
+    padding: 10px 12px;
     cursor: pointer;
     font-size: 0.9rem;
     transition: background-color 0.3s;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
+    min-height: 40px;
     text-align: center;
 }
 
 .share-btn:hover {
     background: #4B5563;
 }
-
         .share-menu {
             display: none;
             position: absolute;
