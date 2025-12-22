@@ -173,6 +173,41 @@ const items = [
     }
 ];
 
+function updateMetaTagsForArticle(item) {
+    // Динамически обновляем метатеги
+    document.title = `${item.title} | Хранилище цифровых ресурсов`;
+    
+    // Обновляем description
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+        metaDesc.setAttribute('content', item.shortDescription);
+    }
+    
+    // Создаём или обновляем Open Graph теги
+    updateOpenGraphTags(item);
+}
+
+function updateOpenGraphTags(item) {
+    const articleUrl = `${window.location.origin}${window.location.pathname}?article=${item.id}`;
+    
+    // Функция для создания/обновления метатегов
+    const setMeta = (property, content) => {
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        if (!tag) {
+            tag = document.createElement('meta');
+            tag.setAttribute('property', property);
+            document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
+    };
+    
+    setMeta('og:title', item.title);
+    setMeta('og:description', item.shortDescription);
+    setMeta('og:image', item.image.startsWith('http') ? item.image : window.location.origin + '/' + item.image);
+    setMeta('og:url', articleUrl);
+    setMeta('og:type', 'article');
+}
+
 // Функция для работы с URL параметрами
 function getUrlParam(name) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -185,6 +220,9 @@ function openArticleFromUrl() {
     if (articleId) {
         const item = items.find(item => item.id === parseInt(articleId));
         if (item) {
+            // ОБНОВЛЯЕМ МЕТАТЕГИ
+            updateMetaTagsForArticle(item);
+            
             // Небольшая задержка, чтобы страница успела загрузиться
             setTimeout(() => {
                 showArticleModal(item);
@@ -322,6 +360,7 @@ const shareHandlers = {
 
 // Функция показа модального окна с полной статьей
 function showArticleModal(item) {
+    updateMetaTagsForArticle(item);
     // Добавляем параметр в URL при открытии модалки
     const url = new URL(window.location);
     url.searchParams.set('article', item.id);
