@@ -933,8 +933,20 @@ function setupEventListeners() {
 window.addEventListener('popstate', function() {
     const articleId = getUrlParam('article');
     if (!articleId) {
-        // Если вышли со статьи (нет параметра), восстанавливаем оригинальный title
-        const originalTitle = "Хранилище | Управление цифровыми ресурсами"; // или другой
+        // Определяем текущую страницу по URL
+        const path = window.location.pathname;
+        let originalTitle = "Хранилище | Управление цифровыми ресурсами";
+        
+        if (path.includes('items.html')) {
+            originalTitle = "Все элементы | Хранилище";
+        } else if (path.includes('categ.html')) {
+            originalTitle = "Категории | Хранилище";
+        } else if (path.includes('privacy.html')) {
+            originalTitle = "Политика конфиденциальности | Хранилище";
+        } else if (path.includes('terms.html')) {
+            originalTitle = "Условия использования | Хранилище";
+        }
+        
         document.title = originalTitle;
     }
 });
