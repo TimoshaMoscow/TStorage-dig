@@ -936,3 +936,61 @@
                 font-size: 0.75rem;
             }
         }
+
+/* Специфичные стили для темной темы */
+
+[data-theme="dark"] .modal-content {
+    background: var(--surface-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .info-box {
+    background: rgba(30, 41, 59, 0.9);
+    border-left-color: var(--primary-color);
+}
+
+[data-theme="dark"] .step-card {
+    background: rgba(30, 41, 59, 0.7);
+    border-left-color: var(--primary-color);
+}
+
+[data-theme="dark"] .contact-method {
+    background: rgba(30, 41, 59, 0.7);
+}
+
+[data-theme="dark"] .field-item {
+    background: rgba(30, 41, 59, 0.5);
+}
+
+/* SVG иконки */
+[data-theme="dark"] .logo-icon {
+    filter: brightness(0.9);
+}
+
+/* Особенности для изображений */
+[data-theme="dark"] .item-image {
+    filter: brightness(0.85);
+    transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .item-image:hover {
+    filter: brightness(1);
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
