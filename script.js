@@ -347,6 +347,61 @@ function restorePageState() {
     }
 }
 
+// Функция активации страницы
+function activatePage(pageId) {
+    // Убираем активный класс у всех страниц и ссылок
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    // Активируем нужную страницу
+    const targetPage = document.getElementById(`${pageId}-page`);
+    if (targetPage) {
+        targetPage.classList.add('active');
+    }
+    
+    // Активируем соответствующую ссылку
+    const targetLink = document.querySelector(`.nav-link[href="#${pageId}"]`);
+    if (targetLink) {
+        targetLink.classList.add('active');
+    }
+    
+    // Обновляем хлебные крошки
+    updateBreadcrumbs(pageId);
+    
+    // Если переходим на страницу элементов, восстанавливаем пагинацию
+    if (pageId === 'items') {
+        setupPagination();
+    }
+    
+    // Сохраняем состояние
+    setTimeout(savePageState, 100);
+}
+
+// ========== ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ==========
+
+// Функция для определения текущей страницы
+function getCurrentPage() {
+    const path = window.location.pathname;
+    const hash = window.location.hash.substring(1);
+    
+    // Если есть хэш (SPA навигация)
+    if (hash) return hash;
+    
+    // Если открыт отдельный файл
+    const pageMap = {
+        '/items.html': 'items',
+        '/categ.html': 'categories', 
+        '/index.html': 'home',
+        '/': 'home',
+        '/privacy.html': 'privacy',
+        '/terms.html': 'terms'
+    };
+}
+
 function updateMetaTagsForArticle(item) {
     // Динамически обновляем метатеги
     document.title = `${item.title} | Хранилище цифровых ресурсов`;
