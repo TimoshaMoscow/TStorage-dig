@@ -1010,7 +1010,7 @@ function createItemCard(item) {
     const titleHTML = hasAuthor ? `
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
             <h3 class="item-title">${item.title}</h3>
-            <span class="verified-badge" title="Статья проверена автором" style="
+            <span class="verified-badge" title="Информация проверена" style="
                 color: #1DA1F2;
                 font-size: 1rem;
                 cursor: help;
