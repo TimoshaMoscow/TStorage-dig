@@ -951,39 +951,82 @@ function createItemCard(item) {
     const card = document.createElement('div');
     card.className = 'item-card glass-effect';
     
-    // Используем shortDescription если есть, иначе обрезаем description
     const displayDescription = item.shortDescription || 
         (item.description.length > 120 ? item.description.substring(0, 120) + '...' : item.description);
     
-    // Показываем кнопку "Читать" только если есть полное описание, отличное от короткого
     const showReadMore = item.description && item.description.length > 120 && item.shortDescription !== item.description;
+    
+    // Проверяем, есть ли автор
+    const hasAuthor = item.author && item.author.trim() !== '';
+    
+    // HTML для автора с галочкой
+    const authorHTML = hasAuthor ? `
+        <div class="item-author" style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        ">
+            <div class="author-avatar" style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 600;
+                font-size: 0.9rem;
+            ">
+                ${item.author.charAt(0).toUpperCase()}
+            </div>
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span style="font-weight: 500; color: var(--text-primary);">
+                        ${item.author}
+                    </span>
+                    <!-- ГОЛУБАЯ ГАЛОЧКА -->
+                    <span class="verified-badge" title="Проверенный автор" style="
+                        color: #1DA1F2;
+                        font-size: 1rem;
+                        cursor: help;
+                        display: inline-flex;
+                        align-items: center;
+                    ">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DA1F2" style="vertical-align: middle;">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </span>
+                </div>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);">
+                    Автор статьи
+                </span>
+            </div>
+        </div>
+    ` : '';
+    
+    // HTML для заголовка с галочкой (если есть автор)
+    const titleHTML = hasAuthor ? `
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+            <h3 class="item-title">${item.title}</h3>
+            <span class="verified-badge" title="Статья проверена автором" style="
+                color: #1DA1F2;
+                font-size: 1rem;
+                cursor: help;
+            ">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DA1F2" style="vertical-align: middle;">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </span>
+        </div>
+    ` : `<h3 class="item-title">${item.title}</h3>`;
     
     card.innerHTML = `
         <img src="${item.image}" alt="${item.title}" class="item-image" title="${item.title}">
         <div class="item-content">
-            <h3 class="item-title">${item.title}</h3>
-            
-            <!-- БЛОК АВТОРА И ДАТЫ -->
-            <div class="item-meta" style="
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                margin-bottom: 10px;
-                font-size: 0.9rem;
-                color: var(--text-secondary);
-            ">
-                <!-- Иконка и имя автора -->
-                <div class="item-author" style="display: flex; align-items: center; gap: 5px;">
-                    <span style="font-size: 1.1rem;">👤</span>
-                    <span>${item.author || 'Аноним'}</span>
-                </div>
-                
-                <!-- Дата публикации (можно добавить в массив items) -->
-                <div class="item-date" style="display: flex; align-items: center; gap: 5px;">
-                    <span style="font-size: 1rem;">📅</span>
-                    <span>${item.date || 'Неизвестно'}</span>
-                </div>
-            </div>
+            ${authorHTML}
+            ${titleHTML}
             
             <p class="item-description">${displayDescription}</p>
             <div class="item-tags" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px;">
@@ -1005,6 +1048,20 @@ function createItemCard(item) {
             </div>
         </div>
     `;
+    
+    // Добавляем обработчик для галочки
+    const verifiedBadges = card.querySelectorAll('.verified-badge');
+    verifiedBadges.forEach(badge => {
+        badge.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showVerificationTooltip(e.target, hasAuthor ? item.author : 'Автор');
+        });
+        
+        // Показываем тултип при наведении
+        badge.addEventListener('mouseenter', (e) => {
+            showVerificationTooltip(e.target, hasAuthor ? item.author : 'Автор');
+        });
+    });
     
     const image = card.querySelector('.item-image');
     image.addEventListener('click', () => {
@@ -1032,6 +1089,73 @@ function createItemCard(item) {
     });
     
     return card;
+}
+
+// Функция для показа тултипа проверки
+function showVerificationTooltip(element, authorName) {
+    // Удаляем старый тултип если есть
+    const oldTooltip = document.querySelector('.verification-tooltip');
+    if (oldTooltip) oldTooltip.remove();
+    
+    // Создаем новый тултип
+    const tooltip = document.createElement('div');
+    tooltip.className = 'verification-tooltip';
+    tooltip.innerHTML = `
+        <div style="
+            position: fixed;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: var(--shadow-lg);
+            z-index: 10000;
+            max-width: 300px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        ">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <span style="color: #1DA1F2; font-size: 1.2rem;">✓</span>
+                <strong>Информация проверена</strong>
+            </div>
+            <p style="margin: 0; color: var(--text-secondary); line-height: 1.4;">
+                Автор <strong>${authorName}</strong> подтвердил достоверность информации в этой статье.
+            </p>
+            <div style="
+                position: absolute;
+                bottom: -6px;
+                left: 20px;
+                width: 12px;
+                height: 12px;
+                background: var(--card-bg);
+                border-right: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                transform: rotate(45deg);
+            "></div>
+        </div>
+    `;
+    
+    // Позиционируем тултип рядом с галочкой
+    const rect = element.getBoundingClientRect();
+    tooltip.style.top = (rect.top - 120) + 'px';
+    tooltip.style.left = (rect.left - 140) + 'px';
+    
+    document.body.appendChild(tooltip);
+    
+    // Автоудаление через 3 секунды
+    setTimeout(() => {
+        if (tooltip && tooltip.parentNode) {
+            tooltip.remove();
+        }
+    }, 3000);
+    
+    // Удаление при клике вне тултипа
+    document.addEventListener('click', function removeTooltip(e) {
+        if (!tooltip.contains(e.target) && e.target !== element) {
+            tooltip.remove();
+            document.removeEventListener('click', removeTooltip);
+        }
+    });
 }
 
 // Настройка обработчиков событий
