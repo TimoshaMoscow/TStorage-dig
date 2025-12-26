@@ -1537,3 +1537,14 @@ function generateStaticArticlePages() {
 // Чтобы сгенерировать страницы, выполните в консоли браузера:
 // generateStaticArticlePages()
 // Затем скопируйте код каждого файла и создайте физические файлы в папке /articles/
+
+// Анимация галочки при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавляем класс pulse к галочкам
+    setTimeout(() => {
+        document.querySelectorAll('.verified-badge').forEach(badge => {
+            badge.classList.add('pulse');
+            setTimeout(() => badge.classList.remove('pulse'), 1000);
+        });
+    }, 500);
+});
