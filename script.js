@@ -263,19 +263,6 @@ function getCurrentPage() {
     return pageMap[path] || 'home';
 }
 
-// Обновляем инициализацию
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPage = getCurrentPage();
-    
-    // Если это не SPA страница (отдельный файл)
-    if (!window.location.hash && currentPage !== 'home') {
-        // Активируем соответствующую страницу
-        activatePage(currentPage);
-    }
-    
-    // ... остальная инициализация
-});
-
 // ========== СОХРАНЕНИЕ СОСТОЯНИЯ СТРАНИЦЫ ==========
 
 // Сохранение текущего состояния
@@ -1381,6 +1368,13 @@ document.addEventListener('DOMContentLoaded', function() {
         activeFiltersDiv.className = 'active-filters';
         searchContainer.parentNode.insertBefore(activeFiltersDiv, searchContainer.nextSibling);
     }
+
+    // Если это не SPA страница (отдельный файл)
+    if (!window.location.hash && currentPage !== 'home') {
+        // Активируем соответствующую страницу
+        activatePage(currentPage);
+    }
+    
 });
 
 // Настройка вкладок
@@ -1893,7 +1887,6 @@ window.addEventListener('popstate', function() {
 });
 }
 
-// ... весь ваш существующий код ...
 
 // === ДОБАВЬТЕ ЭТО В САМЫЙ КОНЕЦ ФАЙЛА ===
 
