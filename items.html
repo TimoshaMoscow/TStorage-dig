@@ -248,6 +248,18 @@
         </div>
     </footer>
 
+<script>
+    // Автоматически активируем вкладку "Элементы" при загрузке items.html
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const itemsLink = document.querySelector('a[href="#items"]');
+        if (itemsLink && !itemsLink.classList.contains('active')) {
+            itemsLink.click();
+        }
+    }, 100);
+});
+</script>
+
     <script src="script.js"></script>
 
 </body>
