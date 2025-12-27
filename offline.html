@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Офлайн режим | Хранилище</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #F0F8FF, #E3F2FD);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .offline-container {
+            max-width: 500px;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .offline-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #4A90E2;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .features {
+            background: #F8FAFF;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #3A7BC8;
+        }
+        
+        .connection-status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .online { background: #D1FAE5; color: #065F46; }
+        .offline { background: #FEE2E2; color: #991B1B; }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📶</div>
+        <h1>Вы в офлайн-режиме</h1>
+        <p>Похоже, у вас нет подключения к интернету. Не волнуйтесь — Хранилище работает и офлайн!</p>
+        
+        <div class="features">
+            <div class="feature">
+                <span>✅</span>
+                <span>Доступ к закэшированным статьям</span>
+            </div>
+            <div class="feature">
+                <span>✅</span>
+                <span>Просмотр категорий и тегов</span>
+            </div>
+            <div class="feature">
+                <span>✅</span>
+                <span>Поиск по сохраненным данным</span>
+            </div>
+            <div class="feature">
+                <span>⏳</span>
+                <span>Новые статьи синхронизируются при подключении</span>
+            </div>
+        </div>
+        
+        <p>Как только соединение восстановится, все данные автоматически обновятся.</p>
+        
+        <button onclick="window.location.reload()">Попробовать снова</button>
+        
+        <div id="status" class="connection-status offline">
+            🔴 Отсутствует подключение к интернету
+        </div>
+    </div>
+    
+    <script>
+        // Проверка подключения
+        function updateConnectionStatus() {
+            const statusEl = document.getElementById('status');
+            
+            if (navigator.onLine) {
+                statusEl.textContent = '🟢 Подключение восстановлено! Обновляем...';
+                statusEl.className = 'connection-status online';
+                
+                setTimeout(() => {
+                    window.location.href = '/hranilishe.github.io/';
+                }, 2000);
+            } else {
+                statusEl.textContent = '🔴 Отсутствует подключение к интернету';
+                statusEl.className = 'connection-status offline';
+            }
+        }
+        
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        updateConnectionStatus();
+        
+        // Автоматическая перезагрузка при восстановлении
+        let wasOffline = !navigator.onLine;
+        setInterval(() => {
+            if (wasOffline && navigator.onLine) {
+                window.location.reload();
+            }
+            wasOffline = !navigator.onLine;
+        }, 5000);
+    </script>
+</body>
+</html>
