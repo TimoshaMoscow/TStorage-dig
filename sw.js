@@ -115,12 +115,19 @@ async function cacheFirst(request) {
     
     return networkResponse;
   } catch (error) {
-    // Можно вернуть кастомную офлайн-страницу
-    return new Response('Офлайн режим', {
-      status: 503,
-      headers: { 'Content-Type': 'text/plain' }
+  // Возвращаем офлайн страницу
+  if (event.request.mode === 'navigate') {
+    return caches.match('/hranilishe.github.io/offline.html');
+  }
+  
+  // Для API запросов возвращаем пустой ответ
+  if (event.request.headers.get('Accept').includes('application/json')) {
+    return new Response(JSON.stringify({ offline: true }), {
+      headers: { 'Content-Type': 'application/json' }
     });
   }
+  
+  return Response.error();
 }
 
 // Перехват запросов
