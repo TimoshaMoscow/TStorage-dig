@@ -2,16 +2,13 @@
 const originalTitle = document.title;
 const originalDescription = document.querySelector('meta[name="description"]')?.content || '';
 
-// authorStatus: "owner", // 🔴 Красная галочка
-// authorStatus: "verified", // 🔵 Голубая галочка
-// authorStatus не указан → ⚪ Серая галочка
 // Данные элементов
 const items = [
     {
         id: 1,
         title: "Тимошка из Москвы",
         author: "Тимофей",
-        authorStatus: "owner",
+        authorStatus: "owner", // 🔴 Красная галочка
         date: "13.11.2025",
         shortDescription: "Канал про Minecraft с геймплеем и проектами",
         description: "Канал с контентом о мире Minecraft: от геймплея до создания проектов. Здесь вы найдете обзоры, гайды и многое другое для любителей этой культовой игры. Регулярные стримы, интересные сборки и советы для новичков.",
@@ -56,6 +53,7 @@ const items = [
         id: 5,
         title: "'Хули' - это мат?",
         author: "Тимофей",
+        authorStatus: "verified", // 🔵 Голубая галочка
         date: "16.11.2025",
         shortDescription: "Разбираемся с сленгом и матом",
         description: "Хули - это сленговое слово. СЛЕНГ - это не МАТ. Подробное объяснение разницы между сленгом, жаргоном и нецензурной лексикой. Лингвистический анализ современной русской речи.",
@@ -245,6 +243,41 @@ const items = [
         url: "https://t.me/Dylan_TheOmniscient_bot"
     }
 ];
+
+// ========== СИСТЕМА ЦВЕТНЫХ ГАЛОЧЕК ==========
+const authorBadgeColors = {
+    owner: {
+        color: "#EF4444",     // Красный для владельца
+        title: "Владелец платформы",
+        badge: "Владелец"
+    },
+    verified: {
+        color: "#1DA1F2",     // Голубой для верифицированных
+        title: "Верифицированный автор",
+        badge: "Верифицирован"
+    },
+    default: {
+        color: "#6B7280",     // Серый по умолчанию
+        title: "Автор подтвердил информацию",
+        badge: "Автор"
+    }
+};
+
+// Функция для получения цвета галочки
+function getAuthorBadgeColor(item) {
+    if (!item.author || item.author.trim() === '') {
+        return null; // Аноним → нет галочки
+    }
+    
+    // Проверяем специальные статусы
+    if (item.authorStatus === 'owner') {
+        return authorBadgeColors.owner;
+    } else if (item.authorStatus === 'verified') {
+        return authorBadgeColors.verified;
+    } else {
+        return authorBadgeColors.default;
+    }
+}
 
 // ========== СОХРАНЕНИЕ СОСТОЯНИЯ СТРАНИЦЫ ==========
 
@@ -939,7 +972,6 @@ function showCategoryItems(categoryName, categoryTags) {
         )
     );
     
-    
     if (filteredItems.length === 0) {
         categoryItemsContainer.innerHTML = `
             <div class="no-items">
@@ -978,42 +1010,6 @@ function renderAllItems(itemsToRender = items) {
     itemsToRender.forEach(item => {
         allItemsContainer.appendChild(createItemCard(item));
     });
-}
-
-// Создание карточки элемента
-// ========== СИСТЕМА ЦВЕТНЫХ ГАЛОЧЕК ==========
-const authorBadgeColors = {
-    owner: {
-        color: "#EF4444",     // Красный для владельца
-        title: "Владелец платформы",
-        badge: "Владелец"
-    },
-    verified: {
-        color: "#1DA1F2",     // Голубой для верифицированных
-        title: "Верифицированный автор",
-        badge: "Верифицирован"
-    },
-    default: {
-        color: "#6B7280",     // Серый по умолчанию
-        title: "Автор подтвердил информацию",
-        badge: "Автор"
-    }
-};
-
-// Функция для получения цвета галочки
-function getAuthorBadgeColor(item) {
-    if (!item.author || item.author.trim() === '') {
-        return null; // Аноним → нет галочки
-    }
-    
-    // Проверяем специальные статусы
-    if (item.authorStatus === 'owner') {
-        return authorBadgeColors.owner;
-    } else if (item.authorStatus === 'verified') {
-        return authorBadgeColors.verified;
-    } else {
-        return authorBadgeColors.default;
-    }
 }
 
 // ========== ОБНОВЛЁННАЯ ФУНКЦИЯ СОЗДАНИЯ КАРТОЧКИ ==========
@@ -1292,34 +1288,6 @@ function showVerificationTooltip(element, authorName, badgeInfo) {
         }
     });
 }
-    
-    const image = card.querySelector('.item-image');
-    image.addEventListener('click', () => {
-        window.open(item.url, '_blank');
-    });
-    
-    // Обработчик кнопки "Читать"
-    const readMoreBtn = card.querySelector('.read-more-btn');
-    if (readMoreBtn) {
-        readMoreBtn.addEventListener('click', () => {
-            showArticleModal(item);
-        });
-    }
-    
-    // Обработчики для кнопок шаринга
-    const shareOptions = card.querySelectorAll('.share-option');
-    shareOptions.forEach(option => {
-        option.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const platform = option.dataset.platform;
-            if (shareHandlers[platform]) {
-                shareHandlers[platform](item);
-            }
-        });
-    });
-    
-    return card;
-}
 
 // Настройка обработчиков событий
 function setupEventListeners() {
@@ -1457,8 +1425,6 @@ window.addEventListener('popstate', function() {
     }
 });
 }
-
-// ... весь ваш существующий код ...
 
 // === ДОБАВЬТЕ ЭТО В САМЫЙ КОНЕЦ ФАЙЛА ===
 
