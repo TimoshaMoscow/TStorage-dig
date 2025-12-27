@@ -268,7 +268,7 @@ const authorBadgeColors = {
         badge: "Владелец"
     },
     vip: {
-        color: "#1DA1F2",     // Жёлтый для вип
+        color: "#ffc517",     // Жёлтый для вип
         title: "Доверенное лицо",
         badge: "VIP автор"
     },
@@ -293,6 +293,8 @@ function getAuthorBadgeColor(item) {
     // Проверяем специальные статусы
     if (item.authorStatus === 'owner') {
         return authorBadgeColors.owner;
+    } else if (item.authorStatus === 'vip') {
+        return authorBadgeColors.vip;
     } else if (item.authorStatus === 'verified') {
         return authorBadgeColors.verified;
     } else {
