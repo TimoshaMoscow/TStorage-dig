@@ -10,6 +10,124 @@
     <link rel="stylesheet" href="style.css?v=1.0.3">
     <link rel="icon" href="images/hranit.png" type="image/png">
     <title>Хранилище | Управление цифровыми ресурсами</title>
+
+    <!-- После тега <title> добавь: -->
+<link rel="manifest" href="/hranilishe.github.io/manifest.json">
+<meta name="theme-color" content="#4A90E2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хранилище">
+<link rel="apple-touch-icon" href="/hranilishe.github.io/images/hranit.png">
+
+<!-- Добавь скрипт регистрации Service Worker в конец body: -->
+<script>
+// Регистрация Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/hranilishe.github.io/sw.js')
+      .then(registration => {
+        console.log('✅ Service Worker зарегистрирован:', registration.scope);
+        
+        // Проверка обновлений
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          console.log('🔄 Обнаружено обновление Service Worker');
+          
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // Новый Service Worker установлен, показать уведомление
+              showUpdateNotification();
+            }
+          });
+        });
+      })
+      .catch(error => {
+        console.error('❌ Ошибка регистрации Service Worker:', error);
+      });
+  });
+}
+
+// Проверка подключения
+function checkConnection() {
+  if (!navigator.onLine) {
+    document.body.classList.add('offline');
+    showOfflineNotification();
+  } else {
+    document.body.classList.remove('offline');
+  }
+}
+
+window.addEventListener('online', checkConnection);
+window.addEventListener('offline', checkConnection);
+checkConnection();
+
+// Уведомление об обновлении
+function showUpdateNotification() {
+  if (confirm('Доступно обновление Хранилища. Обновить сейчас?')) {
+    window.location.reload();
+  }
+}
+
+// Офлайн уведомление
+function showOfflineNotification() {
+  const notification = document.createElement('div');
+  notification.className = 'offline-notification';
+  notification.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #F59E0B;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    ">
+      <span>📶</span>
+      <span>Вы в офлайн-режиме. Данные могут быть устаревшими.</span>
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.remove();
+  }, 5000);
+}
+
+// Сохранение данных для офлайн-режима
+function saveForOffline(data) {
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'CACHE_NEW_ARTICLE',
+      article: data
+    });
+  }
+}
+
+// Получение информации о кэше
+async function getCacheInfo() {
+  if ('serviceWorker' in navigator) {
+    return new Promise((resolve) => {
+      const channel = new MessageChannel();
+      
+      navigator.serviceWorker.controller.postMessage(
+        { type: 'GET_CACHE_INFO' },
+        [channel.port2]
+      );
+      
+      channel.port1.onmessage = (event) => {
+        resolve(event.data);
+      };
+    });
+  }
+  return null;
+}
+</script>
     <!-- Open Graph для соцсетей (ОБЯЗАТЕЛЬНО!) -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Хранилище цифровых ресурсов">
