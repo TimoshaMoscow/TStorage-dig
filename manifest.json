@@ -12,24 +12,24 @@
   "categories": ["productivity", "utilities", "education"],
   "icons": [
     {
-      "src": "/hranilishe.github.io/images/hranit.png",
+      "src": "/hranilishe.github.io/images/hranit-icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/hranilishe.github.io/images/hranit.png",
+      "src": "/hranilishe.github.io/images/hranit-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/hranilishe.github.io/images/hranit-256.png",
+      "src": "/hranilishe.github.io/images/hranit-icon.png",
       "sizes": "256x256",
       "type": "image/png"
     },
     {
-      "src": "/hranilishe.github.io/images/hranit.svg",
+      "src": "/hranilishe.github.io/images/hranit-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
