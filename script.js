@@ -1427,9 +1427,9 @@ window.addEventListener('popstate', function() {
         const path = window.location.pathname;
         let originalTitle = "Хранилище | Управление цифровыми ресурсами";
         
-        if (path.includes('items.html')) {
+        if (path.includes('№items')) {
             originalTitle = "Все элементы | Хранилище";
-        } else if (path.includes('categ.html')) {
+        } else if (path.includes('#categories')) {
             originalTitle = "Категории | Хранилище";
         } else if (path.includes('privacy.html')) {
             originalTitle = "Политика конфиденциальности | Хранилище";
