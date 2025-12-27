@@ -1297,3 +1297,8 @@ footer {
 .author-badge-expert { border-color: #10B981 !important; }
 .author-badge-verified { border-color: #1DA1F2 !important; }
 .author-badge-default { border-color: #6B7280 !important; }
+
+// Добавляем в CSS:
+.author-with-badge:hover .badge-on-hover {
+    display: inline-block !important;
+}
