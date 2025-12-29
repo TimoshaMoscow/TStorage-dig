@@ -5,6 +5,7 @@ const originalDescription = document.querySelector('meta[name="description"]')?.
 // authorStatus: "owner", // 🔴 Красная галочка
 // authorStatus: "verified", // 🔵 Голубая галочка
 // authorStatus не указан → ⚪ Серая галочка
+// authorStatus: "vip", // Вип
 
 // Данные элементов
 const items = [
