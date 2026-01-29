@@ -163,18 +163,6 @@ const items = [
     },
     {
         id: 14,
-        title: "Какие тайны могут быть у Кристаллов?",
-        author: "Тимофей",
-        authorStatus: "owner",
-        date: "31.11.2025",
-        shortDescription: "Размышляем о смысле кристаллов",
-        description: "Премьера сюжетного сезона - Тайна Кристалла уже скоро!\n\nИ по секрету скажу, подписчики Телеграм канала узнали об этом раньше всех!\n\nЖду всех по кнопке Перейти к ресурсу!",
-        image: "images/crystalls.png",
-        tags: ["майнкрафт", "тайны", "кристаллы", "игры", "вопрос", "minecraft", "ютуб", "разработка"],
-        url: "https://t.me/MinecraftWithTimosha/1764"
-    },
-    {
-        id: 15,
         title: "Just Monika",
         author: "Тимофей",
         authorStatus: "owner",
@@ -186,7 +174,7 @@ const items = [
         url: "https://t.me/druziya2025/32198"
     },
     {
-        id: 16,
+        id: 15,
         title: "Как НЕ надо вести переговоры о пиаре?",
         shortDescription: "Разбор классических ошибок на примере реального диалога",
         description: "Анализ анти-переговоров: что пошло не так?\n\n❌ Ошибка 1: Пиар за 15 звезд\n- Неадекватная оценка стоимости услуг\n- Отсутствие понимания рыночных цен\n\n❌ Ошибка 2: Дай админку в канале\n- Нарушение базовых принциств безопасности\n- Попытка получить беспрецедентный доступ\n\n❌ Ошибка 3: Сам напишу пост\n- Непрофессиональный подход к контенту\n- Игнорирование правил площадки\n\n✅ Правильный подход:\n- Четкое ТЗ и бюджет\n- Уважение правил площадки\n- Профессиональное общение",
@@ -195,7 +183,7 @@ const items = [
         url: "https://timoshamoscow.github.io/hranilishe.github.io/"
     },
     {
-        id: 17,
+        id: 16,
         title: "Недрочабрь",
         author: "Ваш Единственный Друг",
         date: "01.12.2025",
@@ -206,7 +194,7 @@ const items = [
         url: "https://lifehacker.ru/health/kachestvo-zhizni/nedrochabr/"
     },
     {
-        id: 18,
+        id: 17,
         title: "Трендовые запросы",
         date: "01.12.2025",
         shortDescription: "Какие поисковые запросы популярны в Google",
@@ -216,7 +204,7 @@ const items = [
         url: "https://trends.google.ru/trending?geo=RU"
     },
     {
-        id: 19,
+        id: 18,
         title: "Мессенджер Max — вся правда",
         author: "Тимофей",
         authorStatus: "owner",
@@ -228,7 +216,7 @@ const items = [
         url: "https://vc.ru/life/2069180-messendzher-max-bezopasnost-i-uiazvimosti"
     },
     {
-        id: 20,
+        id: 19,
         title: "ИТД",
         date: "25.12.2025",
         shortDescription: "ИТД — это новая гибридная платформа (соцсеть x форум) от блогера Новки, запущенная 16 декабря 2025 года.",
@@ -238,7 +226,7 @@ const items = [
         url: "https://xn--d1ah4a.com/feed"
     },
     {
-        id: 21,
+        id: 20,
         title: "Самый популярный пост на ИТД",
         author: "Тимофей",
         authorStatus: "owner",
@@ -250,7 +238,7 @@ const items = [
         url: "https://xn--d1ah4a.com/@timosha_moscow/post/cc325e1d-e2c8-4d84-b533-982035f8610b"
     },
     {
-        id: 22,
+        id: 21,
         title: "Dylan",
         date: "26.12.2025",
         shortDescription: "ИИ от разработчиков. Для разработчиков и не только",
